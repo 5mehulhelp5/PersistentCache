@@ -94,7 +94,7 @@ Add a new cache frontend in your `app/etc/env.php` under the `cache` key:
    -  ``php bin/magento cache:flush``
 
 ## Usage
-Once installation is successfull invoke `MageStack\PersistentCache\Api\CacheRepositoryInterface` in your class and start using available endpoints.
+Once installation is successfull, invoke `MageStack\PersistentCache\Api\CacheRepositoryInterface` in your class and start using available methods.
 
 ## Contributing
 If you would like to contribute to this module, feel free to fork the repository and create a pull request. Please make sure to follow the coding standards of Magento 2.
