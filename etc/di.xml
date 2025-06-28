@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2025 MageStack. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * DISCLAIMER
+ *
+ * Do not make any kind of changes to this file if you
+ * wish to upgrade this extension to newer version in the future.
+ *
+ * @category  MageStack
+ * @package   MageStack_ParsistentCache
+ * @author    Amit Biswas <amit.biswas.webdeveloper@gmail.com>
+ * @copyright 2025 MageStack
+ * @license   https://opensource.org/licenses/MIT  MIT License
+ * @link      https://github.com/attherateof/ParsistentCache
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="MageStack\ParsistentCache\Api\CacheRepositoryInterface" type="MageStack\ParsistentCache\Model\CacheRepository" />
+    <virtualType name="MageStack\ParsistentCache\Cache\ParsistentCache" type="Magento\Framework\Cache\Frontend\Decorator\TagScope">
+        <arguments>
+            <argument name="frontend" xsi:type="object">Magento\Framework\App\Cache\Frontend\Factory</argument>
+            <argument name="identifier" xsi:type="string">parsistent</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\App\Cache\Frontend\Pool">
+        <arguments>
+            <argument name="frontends" xsi:type="array">
+                <item name="parsistent" xsi:type="object">MageStack\ParsistentCache\Cache\ParsistentCache</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

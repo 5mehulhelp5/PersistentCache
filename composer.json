@@ -1,0 +1,30 @@
+{
+    "name": "mage-stack/module-parsistent-cache",
+    "description": "Magento 2 module for custom cache.",
+    "type": "magento2-module",
+    "license": "MIT",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "Amit Biswas",
+            "email": "amit.biswas.webdeveloper@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "magento/framework": "103.0.8"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "MageStack\\ParsistentCache\\": ""
+        }
+    },
+    "homepage": "https://github.com/attherateof/ParsistentCache",
+    "support": {
+        "issues": "https://github.com/attherateof/ParsistentCache/issues"
+    }
+}
