@@ -82,7 +82,7 @@ Add a new cache frontend in your `app/etc/env.php` under the `cache` key:
 ## Installation
 1. **Install the module via Composer**:
     To install this module, run the following command in your Magento root directory:
-    - ``composer require mage-stack/module-parsistent-cache``
+    - ``composer require mage-stack/module-persistent-cache``
 2. **Enable the module:**
     After installation, enable the module by running:
    - ``php bin/magento module:enable MageStack_PersistentCache``
