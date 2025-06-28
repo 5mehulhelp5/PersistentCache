@@ -85,7 +85,7 @@ Add a new cache frontend in your `app/etc/env.php` under the `cache` key:
     - ``composer require mage-stack/module-parsistent-cache``
 2. **Enable the module:**
     After installation, enable the module by running:
-   - ``php bin/magento module:enable MageStack_ParsistentCache``
+   - ``php bin/magento module:enable MageStack_PersistentCache``
 3. **Apply database updates:**
     Run the setup upgrade command to apply any database changes:
     - ``php bin/magento setup:upgrade``
@@ -94,7 +94,7 @@ Add a new cache frontend in your `app/etc/env.php` under the `cache` key:
    -  ``php bin/magento cache:flush``
 
 ## Usage
-Once installation is successfull invoke `MageStack\ParsistentCache\Api\CacheRepositoryInterface` in your class and start using available endpoints.
+Once installation is successfull invoke `MageStack\PersistentCache\Api\CacheRepositoryInterface` in your class and start using available endpoints.
 
 ## Contributing
 If you would like to contribute to this module, feel free to fork the repository and create a pull request. Please make sure to follow the coding standards of Magento 2.

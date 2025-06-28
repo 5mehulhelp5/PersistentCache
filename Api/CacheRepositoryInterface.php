@@ -10,16 +10,16 @@
  * wish to upgrade this extension to newer version in the future.
  *
  * @category  MageStack
- * @package   MageStack_ParsistentCache
+ * @package   MageStack_PersistentCache
  * @author    Amit Biswas <amit.biswas.webdeveloper@gmail.com>
  * @copyright 2025 MageStack
  * @license   https://opensource.org/licenses/MIT  MIT License
- * @link      https://github.com/attherateof/ParsistentCache
+ * @link      https://github.com/attherateof/PersistentCache
  */
 
 declare(strict_types=1);
 
-namespace MageStack\ParsistentCache\Api;
+namespace MageStack\PersistentCache\Api;
 
 use RuntimeException;
 
@@ -27,7 +27,7 @@ use RuntimeException;
  * Persistance cache repository interface
  *
  * interface CacheRepositoryInterface
- * namespace MageStack\ParsistentCache\Api
+ * namespace MageStack\PersistentCache\Api
  *
  * @api
  *

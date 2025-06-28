@@ -9,11 +9,11 @@
  * wish to upgrade this extension to newer version in the future.
  *
  * @category  MageStack
- * @package   MageStack_ParsistentCache
+ * @package   MageStack_PersistentCache
  * @author    Amit Biswas <amit.biswas.webdeveloper@gmail.com>
  * @copyright 2025 MageStack
  * @license   https://opensource.org/licenses/MIT  MIT License
- * @link      https://github.com/attherateof/ParsistentCache
+ * @link      https://github.com/attherateof/PersistentCache
  */
 
 declare(strict_types=1);
@@ -22,6 +22,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 ComponentRegistrar::register(
     ComponentRegistrar::MODULE,
-    'MageStack_ParsistentCache',
+    'MageStack_PersistentCache',
     __DIR__
 );

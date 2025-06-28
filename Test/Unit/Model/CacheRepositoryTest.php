@@ -9,28 +9,34 @@
  * wish to upgrade this extension to newer version in the future.
  *
  * @category  MageStack
- * @package   MageStack_ParsistentCache
+ * @package   MageStack_PersistentCache
  * @author    Amit Biswas <amit.biswas.webdeveloper@gmail.com>
  * @copyright 2025 MageStack
  * @license   https://opensource.org/licenses/MIT  MIT License
- * @link      https://github.com/attherateof/ParsistentCache
+ * @link      https://github.com/attherateof/PersistentCache
  */
 declare(strict_types=1);
 
-namespace MageStack\ParsistentCache\Test\Unit\Model;
+namespace MageStack\PersistentCache\Test\Unit\Model;
 
-use MageStack\ParsistentCache\Model\CacheRepository;
+use MageStack\PersistentCache\Model\CacheRepository;
 use Magento\Framework\App\Cache\Frontend\Pool as CacheFrontendPool;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Encryption\EncryptorInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
+use Exception;
+use Zend_Cache;
 
 /**
  * PHP unit test for cache repository
- * 
+ *
  * class CacheRepositoryTest
- * namespace MageStack\ParsistentCache\Test\Unit\Model
+ * namespace MageStack\PersistentCache\Test\Unit\Model
+ *
+ * @SuppressWarnings("TooManyPublicMethods")
+ *
  */
 class CacheRepositoryTest extends TestCase
 {
@@ -42,7 +48,7 @@ class CacheRepositoryTest extends TestCase
     /**
      * @var CacheFrontendPool
      */
-    private CacheFrontendPool $cacheFrontendPoolMock;
+    private CacheFrontendPool $cacheFePoolMock;
 
     /**
      * @var EncryptorInterface
@@ -61,12 +67,12 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Seup method for unit test
-     * 
+     *
      * @return void
      */
     protected function setUp(): void
     {
-        $this->cacheFrontendPoolMock = $this->createMock(CacheFrontendPool::class);
+        $this->cacheFePoolMock = $this->createMock(CacheFrontendPool::class);
         $this->encryptorMock = $this->createMock(EncryptorInterface::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
         $this->cacheMock = $this->createMock(FrontendInterface::class);
@@ -75,12 +81,12 @@ class CacheRepositoryTest extends TestCase
             ->method('getHash')
             ->willReturnCallback(fn($key) => hash('sha256', $key));
 
-        $this->cacheFrontendPoolMock
+        $this->cacheFePoolMock
             ->method('get')
             ->willReturn($this->cacheMock);
 
         $this->repository = new CacheRepository(
-            $this->cacheFrontendPoolMock,
+            $this->cacheFePoolMock,
             $this->encryptorMock,
             $this->loggerMock
         );
@@ -88,7 +94,7 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Test Save method happly flow
-     * 
+     *
      * @return void
      */
     public function testSave(): void
@@ -97,6 +103,9 @@ class CacheRepositoryTest extends TestCase
         $data = 'some_data';
         $expectedKey = 'parsistent_' . hash('sha256', $key);
 
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->expects($this->once())
             ->method('save')
@@ -107,7 +116,7 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Test get method for happy flow
-     * 
+     *
      * @return void
      */
     public function testGetReturnsData(): void
@@ -116,6 +125,9 @@ class CacheRepositoryTest extends TestCase
         $expectedKey = 'parsistent_' . hash('sha256', $key);
         $cachedValue = 'cached_data';
 
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->expects($this->once())
             ->method('load')
@@ -128,7 +140,7 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Test get method for null data return
-     * 
+     *
      * @return void
      */
     public function testGetReturnsNullForInvalidData(): void
@@ -136,6 +148,9 @@ class CacheRepositoryTest extends TestCase
         $key = 'test_key';
         $expectedKey = 'parsistent_' . hash('sha256', $key);
 
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->expects($this->once())
             ->method('load')
@@ -148,7 +163,7 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Test delete method for happy flow
-     * 
+     *
      * @return void
      */
     public function testDelete(): void
@@ -156,6 +171,9 @@ class CacheRepositoryTest extends TestCase
         $key = 'test_key';
         $expectedKey = 'parsistent_' . hash('sha256', $key);
 
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->expects($this->once())
             ->method('remove')
@@ -166,29 +184,32 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Test delete by tags happy flow
-     * 
+     *
      * @return void
      */
     public function testDeleteByTagsDeletesWithGivenTags(): void
     {
         $tags = ['custom_tag'];
 
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->expects($this->once())
             ->method('clean')
-            ->with(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, $tags);
+            ->with(Zend_Cache::CLEANING_MODE_MATCHING_TAG, $tags);
 
         $this->repository->deleteByTags($tags);
     }
 
     /**
      * Test delete by tags method for empty arg
-     * 
+     *
      * @return void
      */
     public function testDeleteByTagsIfTagsEmpty(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Tags can not be empty.');
 
         $this->repository->deleteByTags([]);
@@ -196,18 +217,23 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Test delete by tag method for error handling
-     * 
+     *
      * @return void
      */
     public function testDeleteByTagsLogsAndThrowsOnFailure(): void
     {
         $tags = ['some_tag'];
 
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->expects($this->once())
             ->method('clean')
-            ->willThrowException(new \Exception('Simulated failure'));
-
+            ->willThrowException(new Exception('Simulated failure'));
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->loggerMock
             ->expects($this->once())
             ->method('error')
@@ -216,7 +242,7 @@ class CacheRepositoryTest extends TestCase
                 $this->arrayHasKey('stack_trace')
             );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to delete data from cache by tags.');
 
         $this->repository->deleteByTags($tags);
@@ -224,31 +250,40 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Test delete all method for happy flow
-     * 
+     *
      * @return void
      */
     public function testDeleteAll(): void
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->expects($this->once())
             ->method('clean')
-            ->with(\Zend_Cache::CLEANING_MODE_ALL);
+            ->with(Zend_Cache::CLEANING_MODE_ALL);
 
         $this->repository->deleteAll();
     }
 
     /**
      * Test delete all method for error handling
-     * 
+     *
      * @return void
      */
     public function testDeleteAllLogsAndThrowsOnFailure(): void
     {
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->expects($this->once())
             ->method('clean')
-            ->willThrowException(new \Exception('Fail all'));
+            ->willThrowException(new Exception('Fail all'));
 
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->loggerMock
             ->expects($this->once())
             ->method('error')
@@ -257,7 +292,7 @@ class CacheRepositoryTest extends TestCase
                 $this->arrayHasKey('stack_trace')
             );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to fetch data from cache');
 
         $this->repository->deleteAll();
@@ -265,17 +300,22 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Test save method for error handling
-     * 
+     *
      * @return void
      */
     public function testSaveThrowsExceptionOnFailure(): void
     {
         $key = 'bad_key';
         $data = 'data';
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->method('save')
-            ->willThrowException(new \Exception('Failed to save'));
-
+            ->willThrowException(new Exception('Failed to save'));
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->loggerMock
             ->expects($this->once())
             ->method('error')
@@ -284,29 +324,34 @@ class CacheRepositoryTest extends TestCase
                 $this->arrayHasKey('stack_trace')
             );
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to save data to persistance cache.');
 
         $this->repository->save($key, $data);
     }
 
     /**
-     * Test get method for error handling 
-     * 
+     * Test get method for error handling
+     *
      * @return void
      */
     public function testGetThrowsExceptionOnFailure(): void
     {
         $key = 'fail_key';
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->method('load')
-            ->willThrowException(new \Exception('Load failed'));
-
+            ->willThrowException(new Exception('Load failed'));
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->loggerMock
             ->expects($this->once())
             ->method('error');
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to fetch data from cache');
 
         $this->repository->get($key);
@@ -314,21 +359,26 @@ class CacheRepositoryTest extends TestCase
 
     /**
      * Test delete method for error handling
-     * 
+     *
      * @return void
      */
     public function testDeleteThrowsExceptionOnFailure(): void
     {
         $key = 'fail_delete';
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->cacheMock
             ->method('remove')
-            ->willThrowException(new \Exception('Remove failed'));
-
+            ->willThrowException(new Exception('Remove failed'));
+        /**
+         * @phpstan-ignore-next-line
+         */
         $this->loggerMock
             ->expects($this->once())
             ->method('error');
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Unable to delete data from cache by key.');
 
         $this->repository->delete($key);

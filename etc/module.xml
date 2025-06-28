@@ -10,13 +10,13 @@
  * wish to upgrade this extension to newer version in the future.
  *
  * @category  MageStack
- * @package   MageStack_ParsistentCache
+ * @package   MageStack_PersistentCache
  * @author    Amit Biswas <amit.biswas.webdeveloper@gmail.com>
  * @copyright 2025 MageStack
  * @license   https://opensource.org/licenses/MIT  MIT License
- * @link      https://github.com/attherateof/ParsistentCache
+ * @link      https://github.com/attherateof/PersistentCache
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
-    <module name="MageStack_ParsistentCache"/>
+    <module name="MageStack_PersistentCache"/>
 </config>

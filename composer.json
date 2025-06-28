@@ -1,5 +1,5 @@
 {
-    "name": "mage-stack/module-parsistent-cache",
+    "name": "mage-stack/module-ersistent-cache",
     "description": "Magento 2 module for custom cache.",
     "type": "magento2-module",
     "license": "MIT",
@@ -20,11 +20,11 @@
             "registration.php"
         ],
         "psr-4": {
-            "MageStack\\ParsistentCache\\": ""
+            "MageStack\\PersistentCache\\": ""
         }
     },
-    "homepage": "https://github.com/attherateof/ParsistentCache",
+    "homepage": "https://github.com/attherateof/PersistentCache",
     "support": {
-        "issues": "https://github.com/attherateof/ParsistentCache/issues"
+        "issues": "https://github.com/attherateof/PersistentCache/issues"
     }
 }
