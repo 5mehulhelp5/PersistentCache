@@ -1,5 +1,5 @@
 {
-    "name": "mage-stack/module-ersistent-cache",
+    "name": "mage-stack/module-persistent-cache",
     "description": "Magento 2 module for custom cache.",
     "type": "magento2-module",
     "license": "MIT",
